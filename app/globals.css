@@ -12,3 +12,43 @@
 .animate-spin-slow {
   animation: spin 30s linear infinite;
 }
+
+.animate-spin-medium {
+  animation: spin 5s linear infinite;
+}
+
+body {
+  transition-property: all;
+  transition-timing-function: ease-in-out;
+  transition-duration: 500ms;
+}
+
+@keyframes progress-fill {
+  0% {
+    width: 0%;
+  }
+
+  15% {
+    width: 10%;
+  }
+
+  30% {
+    width: 20%;
+  }
+
+  45% {
+    width: 30%;
+  }
+
+  60% {
+    width: 40%;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-progress-fill {
+  animation: progress-fill 4.3s ease-in-out;
+}

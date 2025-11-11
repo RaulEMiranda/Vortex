@@ -13,6 +13,14 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { TransitionLink } from "./TransitionLink";
+const navItems = [
+  { name: "Inicio", href: "/", icon: Home },
+  { name: "Servicios", href: "/servicios", icon: Briefcase },
+  { name: "Proyectos", href: "/proyectos", icon: FolderOpen },
+  { name: "Nosotros", href: "/nosotros", icon: Users },
+  { name: "Contacto", href: "/contacto", icon: Mail },
+];
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,14 +34,6 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const navItems = [
-    { name: "Inicio", href: "/", icon: Home },
-    { name: "Servicios", href: "/servicios", icon: Briefcase },
-    { name: "Proyectos", href: "/proyectos", icon: FolderOpen },
-    { name: "Nosotros", href: "/nosotros", icon: Users },
-    { name: "Contacto", href: "/contacto", icon: Mail },
-  ];
 
   return (
     <>
@@ -50,8 +50,7 @@ export default function Header() {
             <div className="flex items-center justify-between px-8 py-4">
               {/* Logo Desktop */}
               <div className="relative group cursor-pointer">
-                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-500"></div>
-                <div className="relative w-14 h-14 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full shadow-lg">
+                <div className="relative w-14 h-14 rounded-full">
                   <Image
                     src="/logo.png"
                     alt="VertexDev Logo"
@@ -66,7 +65,7 @@ export default function Header() {
                 {navItems.map((item, index) => {
                   const Icon = item.icon;
                   return (
-                    <a
+                    <TransitionLink
                       key={item.name}
                       href={item.href}
                       onClick={() => setActiveIndex(index)}
@@ -76,11 +75,11 @@ export default function Header() {
                       }}
                     >
                       {/* Hover Background Effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-600/0 via-purple-600/50 to-pink-600/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out rounded-full"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-sky-600/0 via-sky-600/50 to-sky-300/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out rounded-full"></div>
 
                       {/* Active Indicator */}
                       <div
-                        className={`absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-full transition-all duration-500 ${
+                        className={`absolute inset-0 bg-sky-600/90 rounded-full transition-all duration-500 ${
                           activeIndex === index
                             ? "opacity-100 scale-100"
                             : "opacity-0 scale-75"
@@ -90,11 +89,12 @@ export default function Header() {
                       {/* Content */}
                       <div className="relative flex items-center gap-2">
                         <Icon
-                          className={`w-5 h-5 transition-all duration-300 ${
+                          className={`w-5 h-5 transition-all duration-300  ${
                             activeIndex === index
-                              ? "text-purple-400"
-                              : "text-gray-400 group-hover:text-purple-400 group-hover:scale-110"
+                              ? "text-amber-600"
+                              : "text-gray-400 group-hover:text-amber-600 group-hover:scale-110"
                           }`}
+                          strokeWidth={3.5}
                         />
                         <span
                           className={`font-semibold transition-all duration-300 ${
@@ -109,13 +109,13 @@ export default function Header() {
 
                       {/* Bottom Line Indicator */}
                       <div
-                        className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-500 ${
+                        className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-amber-600 to-amber-500 transition-all duration-500 ${
                           activeIndex === index
                             ? "w-full"
                             : "w-0 group-hover:w-full"
                         }`}
                       ></div>
-                    </a>
+                    </TransitionLink>
                   );
                 })}
               </div>
@@ -144,7 +144,7 @@ export default function Header() {
               className="relative w-12 h-12 bg-gray-800/90 backdrop-blur-sm rounded-full border-2 border-gray-700 flex items-center justify-center overflow-hidden group"
             >
               <div
-                className={`absolute inset-0 bg-gradient-to-br from-purple-600 to-pink-600 transition-transform duration-500 ${
+                className={`absolute inset-0 bg-gradient-to-br from-amber-500 to-sky-700 transition-transform duration-500 ${
                   isOpen ? "scale-100" : "scale-0"
                 }`}
               ></div>
@@ -189,13 +189,10 @@ export default function Header() {
                   const delay = index * 100;
 
                   return (
-                    <Link
+                    <TransitionLink
                       href={item.href}
                       key={item.name}
-                      onClick={() => {
-                        window.location.href = item.href;
-                        setIsOpen(false);
-                      }}
+                      onClick={() => setIsOpen(false)}
                       className="absolute group"
                       style={{
                         transform: isOpen
@@ -222,7 +219,7 @@ export default function Header() {
                       >
                         <Icon className="w-6 h-6 text-purple-400 group-active:text-pink-400 transition-colors" />
                       </div>
-                    </Link>
+                    </TransitionLink>
                   );
                 })}
               </div>
@@ -236,9 +233,7 @@ export default function Header() {
                 <div
                   className="w-16 h-16 rounded-full flex items-center justify-center"
                   style={{
-                    animation: isOpen
-                      ? "spin 15s linear infinite reverse"
-                      : "none",
+                    animation: isOpen ? "spin 15s linear infinite" : "none",
                   }}
                 >
                   <Image
