@@ -168,9 +168,12 @@ export default function Header() {
           }`}
           style={{ top: 0 }}
         >
-          <div className="relative w-full h-full flex items-center justify-center">
+          <div
+            className="relative w-full h-full flex items-center justify-center"
+            onClick={() => setIsOpen(false)}
+          >
             {/* Centro del menú radial */}
-            <div className="relative">
+            <div className="relative" onClick={(e) => e.stopPropagation()}>
               {/* Contenedor rotatorio */}
               <div
                 className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-700 ${
@@ -192,7 +195,9 @@ export default function Header() {
                     <TransitionLink
                       href={item.href}
                       key={item.name}
-                      onClick={() => setIsOpen(false)}
+                      onClick={() => {
+                        setIsOpen(false);
+                      }}
                       className="absolute group"
                       style={{
                         transform: isOpen
