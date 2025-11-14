@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
 import { TransitionProvider } from "@/components/TransitionLink";
+import Header from "@/components/Header/Index";
+import { VortexFooter } from "@/components/Footer/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
         <TransitionProvider>
           <Header />
           <main className="min-h-screen pt-20 bg-[#E6ECF3]">{children}</main>
+          <VortexFooter />
         </TransitionProvider>
       </body>
     </html>

@@ -66,7 +66,7 @@ export const PageTransitionLoader: React.FC<PageTransitionLoaderProps> = ({
           key={isVisible ? "progress-active" : "progress-hidden"}
           className="w-48 h-1.5 bg-gray-300 rounded-full overflow-hidden"
         >
-          <div className="h-full bg-gradient-to-r from-amber-500 to-sky-700 animate-progress-fill" />
+          <div className="h-full bg-linear-to-r from-amber-500 to-sky-700 animate-progress-fill" />
         </div>
       </div>
     </div>
