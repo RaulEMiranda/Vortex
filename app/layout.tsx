@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <TransitionProvider>
           <Header />
-          <main className="min-h-screen pt-20 bg-[#E6ECF3]">{children}</main>
+          <main className="min-h-screen pt-[89] ">{children}</main>
           <VortexFooter />
         </TransitionProvider>
       </body>

@@ -1,15 +1,18 @@
+// components/PageTransitionLoader.tsx
+
 "use client";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 interface PageTransitionLoaderProps {
   isActive: boolean;
+  speed?: "normal" | "fast";
 }
 
 export const PageTransitionLoader: React.FC<PageTransitionLoaderProps> = ({
   isActive,
+  speed = "normal",
 }) => {
-  // Estados para controlar la animación de entrada y salida
   const [shouldRender, setShouldRender] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -27,8 +30,10 @@ export const PageTransitionLoader: React.FC<PageTransitionLoaderProps> = ({
     }
   }, [isActive]);
 
-  // No renderizar nada si no debe estar visible
   if (!shouldRender) return null;
+
+  const progressAnimation =
+    speed === "fast" ? "animate-progress-fill-fast" : "animate-progress-fill";
 
   return (
     <div
@@ -42,8 +47,6 @@ export const PageTransitionLoader: React.FC<PageTransitionLoaderProps> = ({
       <div className="relative z-10 flex flex-col items-center gap-6">
         {/* Logo o imagen animada */}
         <div className="relative w-32 h-32">
-          {/* Círculos animados de fondo */}
-
           <Image
             src="/logo.png"
             alt="Logo"
@@ -61,12 +64,11 @@ export const PageTransitionLoader: React.FC<PageTransitionLoaderProps> = ({
 
       {/* Texto de carga */}
       <div className="text-center space-y-2">
-        {/* Barra de progreso */}
-        <div
-          key={isVisible ? "progress-active" : "progress-hidden"}
-          className="w-48 h-1.5 bg-gray-300 rounded-full overflow-hidden"
-        >
-          <div className="h-full bg-linear-to-r from-amber-500 to-sky-700 animate-progress-fill" />
+        {/* Barra de progreso - SIN key para evitar re-renders */}
+        <div className="w-48 h-1.5 bg-gray-300 rounded-full overflow-hidden">
+          <div
+            className={`h-full bg-linear-to-r from-amber-500 to-sky-700 ${progressAnimation}`}
+          />
         </div>
       </div>
     </div>

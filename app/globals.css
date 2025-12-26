@@ -52,3 +52,16 @@ body {
 .animate-progress-fill {
   animation: progress-fill 4.3s ease-in-out;
 }
+
+@keyframes progress-fill-fast {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-progress-fill-fast {
+  animation: progress-fill-fast 1.7s ease-out forwards;
+}

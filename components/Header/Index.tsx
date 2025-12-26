@@ -1,3 +1,5 @@
+// components/Header/Index.tsx
+
 "use client";
 
 import { useState } from "react";
@@ -20,7 +22,8 @@ export default function Header() {
   const scrolled = useScrollDetection();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50">
+    <nav className=" top-0 left-0 right-0 z-50  w-full">
+      <div className="absolute top-0  w-full h-[89] bg-slate-950"></div>
       <DesktopNav
         scrolled={scrolled}
         activeIndex={activeIndex}

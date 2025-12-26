@@ -1,57 +1,59 @@
+// components/TransitionLink.tsx
+
 "use client";
 import Link, { LinkProps } from "next/link";
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { PageTransitionLoader } from "./PageTransitionLoader";
-import { InitialPageLoader } from "./InitialPageLoader";
 
 // Context para manejar el estado global de los loaders
 const TransitionContext = createContext<{
   isTransitioning: boolean;
   setIsTransitioning: (value: boolean) => void;
-  isInitialLoading: boolean;
+  isInitialLoad: boolean;
 }>({
   isTransitioning: false,
   setIsTransitioning: () => {},
-  isInitialLoading: true,
+  isInitialLoad: true,
 });
 
 export const TransitionProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
+  // Detectar carga inicial (F5 o primera carga)
   useEffect(() => {
-    setIsInitialLoading(true);
+    // Scroll al inicio en cada carga/recarga
+    window.scrollTo(0, 0);
 
+    // Mostrar loader inicial por 1.7 segundos
     const timer = setTimeout(() => {
-      setIsInitialLoading(false);
-    }, 7000);
+      setIsInitialLoad(false);
+    }, 1700);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <TransitionContext.Provider
-      value={{ isTransitioning, setIsTransitioning, isInitialLoading }}
+      value={{ isTransitioning, setIsTransitioning, isInitialLoad }}
     >
-      {/* Loader inicial - componente diferente */}
-      {isInitialLoading && <InitialPageLoader />}
-
-      {/* Contenido de la página */}
+      {/* Ocultar contenido mientras carga inicialmente */}
       <div
-        style={{
-          opacity: isInitialLoading ? 0 : 1,
-          transition: "opacity 0.3s",
-          pointerEvents: isInitialLoading ? "none" : "auto",
-        }}
+        className={`${
+          isInitialLoad ? "opacity-0" : "opacity-100"
+        } transition-opacity duration-500`}
       >
         {children}
       </div>
 
-      {/* Loader de transición entre rutas */}
-      <PageTransitionLoader isActive={isTransitioning} />
+      {/* Loader de transición entre rutas - velocidad normal */}
+      <PageTransitionLoader isActive={isTransitioning} speed="normal" />
+
+      {/* Loader de carga inicial (F5) - velocidad rápida */}
+      <PageTransitionLoader isActive={isInitialLoad} speed="fast" />
     </TransitionContext.Provider>
   );
 };
@@ -75,12 +77,21 @@ export const TransitionLink: React.FC<TransitionLinkProps> = ({
   ...props
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const { setIsTransitioning } = useContext(TransitionContext);
+
+  // Verificar si ya estamos en la ruta actual
+  const isCurrentRoute = pathname === href;
 
   const handleTransition = async (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) => {
     e.preventDefault();
+
+    // Si ya estamos en la ruta, no hacer nada
+    if (isCurrentRoute) {
+      return;
+    }
 
     if (onClick) onClick();
 
@@ -94,7 +105,15 @@ export const TransitionLink: React.FC<TransitionLinkProps> = ({
   };
 
   return (
-    <Link {...props} href={href} onClick={handleTransition}>
+    <Link
+      {...props}
+      href={href}
+      onClick={handleTransition}
+      className={`${props.className || ""} ${
+        isCurrentRoute ? "pointer-events-none" : ""
+      }`}
+      aria-disabled={isCurrentRoute}
+    >
       {children}
     </Link>
   );
