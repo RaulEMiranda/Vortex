@@ -28,7 +28,7 @@ export default function AnimatedText({
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const, // Add 'as const' here
         damping: 12,
         stiffness: 200,
       },
